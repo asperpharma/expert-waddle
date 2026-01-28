@@ -1,0 +1,171 @@
+# Contributing to Asper Beauty Shop
+
+Thank you for your interest in contributing to Asper Beauty Shop! This document provides guidelines and instructions for contributing.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ or Bun
+- npm, yarn, or bun
+- Git
+
+### Setup
+
+1. Fork the repository
+2. Clone your fork:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/asperbeauty.git
+   cd asperbeauty
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## 📝 Development Workflow
+
+### Branch Naming
+
+Use descriptive branch names:
+- `feature/add-product-filters` - New features
+- `fix/cart-quantity-bug` - Bug fixes
+- `docs/update-readme` - Documentation updates
+- `style/header-redesign` - UI/styling changes
+
+### Commit Messages
+
+Follow conventional commit format:
+```
+type(scope): description
+
+[optional body]
+```
+
+Types:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation
+- `style`: Styling/formatting
+- `refactor`: Code refactoring
+- `test`: Adding tests
+- `chore`: Maintenance
+
+Examples:
+```
+feat(cart): add quantity selector to cart items
+fix(search): resolve dropdown not closing on blur
+docs(readme): update installation instructions
+```
+
+## 🎨 Code Style
+
+### TypeScript
+
+- Use TypeScript for all new code
+- Define proper types and interfaces
+- Avoid `any` type when possible
+
+### React Components
+
+- Use functional components with hooks
+- Keep components small and focused
+- Extract reusable logic into custom hooks
+
+### Styling
+
+- Use Tailwind CSS utility classes
+- Follow the design system tokens defined in `src/index.css`
+- Use semantic color tokens (e.g., `text-foreground`, `bg-primary`)
+- Never use hardcoded colors directly
+
+### File Structure
+
+```
+src/
+├── components/       # Reusable components
+│   └── ui/          # shadcn/ui base components
+├── pages/           # Route pages
+├── hooks/           # Custom hooks
+├── lib/             # Utilities
+├── stores/          # Zustand stores
+└── contexts/        # React contexts
+```
+
+## 🔍 Code Review Guidelines
+
+### Before Submitting
+
+- [ ] Code builds without errors (`npm run build`)
+- [ ] Code follows the project's style guidelines
+- [ ] Components are responsive (mobile, tablet, desktop)
+- [ ] RTL support is maintained for Arabic language
+- [ ] No console errors or warnings
+
+### Pull Request Process
+
+1. Create a pull request with a clear title and description
+2. Link any related issues
+3. Wait for review from maintainers
+4. Address any requested changes
+5. Once approved, your PR will be merged
+
+## 🐛 Reporting Bugs
+
+We use structured issue templates to help organize bug reports and feature requests. When creating an issue:
+
+1. Go to the [Issues](https://github.com/Asper-Beauty-Shop/asperbeauty/issues) page
+2. Click "New Issue"
+3. Select the appropriate template:
+   - **Bug Report** - For reporting bugs or issues
+   - **Feature Request** - For suggesting new features
+   - **Enhancement** - For improving existing functionality
+   - **Epic** - For large features with multiple sub-issues
+
+All templates include sub-task checklists to help break down work into manageable pieces.
+
+For detailed guidance on using issue templates, see [Issue Template Guide](.github/ISSUE_TEMPLATE_GUIDE.md).
+
+### Bug Report Template
+
+When reporting bugs, the template will guide you to include:
+
+1. **Description**: Clear description of the issue
+2. **Steps to Reproduce**: How to trigger the bug
+3. **Expected Behavior**: What should happen
+4. **Actual Behavior**: What actually happens
+5. **Screenshots**: If applicable
+6. **Environment**: Browser, OS, device
+7. **Sub-Tasks**: Built-in checklist for tracking the fix
+
+## 💡 Feature Requests
+
+For feature requests, our template will help you provide:
+
+1. **Problem Statement**: What problem does this solve?
+2. **Proposed Solution**: How should it work?
+3. **Alternatives Considered**: Other approaches you've thought about
+4. **Additional Context**: Mockups, examples, etc.
+5. **Implementation Sub-Tasks**: Break down the work into smaller pieces
+
+## 📚 Resources
+
+- [React Documentation](https://react.dev)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [shadcn/ui Components](https://ui.shadcn.com)
+- [Zustand State Management](https://zustand-demo.pmnd.rs)
+- [Lovable Documentation](https://docs.lovable.dev)
+
+## 📧 Contact
+
+For questions or support:
+- Create an issue in this repository
+- Join our community on [Discord](https://discord.gg/lovable-dev)
+
+---
+
+Thank you for contributing! 🙏
