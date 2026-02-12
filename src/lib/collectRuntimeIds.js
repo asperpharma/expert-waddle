@@ -7,9 +7,20 @@
  * 
  * Usage:
  * - Import and use `logErrorWithIds` in catch blocks
- * - Use `setupFetchInterceptor` to automatically log request IDs from fetch calls
+ * - Use `setupFetchInterceptor` to automatically log request IDs from fetch calls (browser only)
  * - Use `setupAxiosInterceptor` to automatically log request IDs from axios calls
  */
+
+// Common request/trace ID header names used across different services
+const ID_HEADERS = [
+  'x-request-id',
+  'x-trace-id',
+  'x-correlation-id',
+  'x-amzn-requestid',
+  'x-amzn-trace-id',
+  'request-id',
+  'trace-id'
+];
 
 /**
  * Extracts common request/trace ID headers from a Response or Headers object
@@ -21,19 +32,9 @@ export function extractRequestIds(responseOrHeaders) {
     ? responseOrHeaders.headers 
     : responseOrHeaders;
 
-  const idHeaders = [
-    'x-request-id',
-    'x-trace-id',
-    'x-correlation-id',
-    'x-amzn-requestid',
-    'x-amzn-trace-id',
-    'request-id',
-    'trace-id'
-  ];
-
   const ids = {};
   
-  idHeaders.forEach(header => {
+  ID_HEADERS.forEach(header => {
     const value = headers.get(header);
     if (value) {
       ids[header] = value;
@@ -73,8 +74,15 @@ export function logErrorWithIds(error, response = null, additionalIds = {}) {
 /**
  * Sets up a global fetch interceptor to log request IDs
  * This wraps the native fetch function to automatically extract and log IDs
+ * 
+ * NOTE: This function is browser-only and requires the window object.
+ * It will throw an error if used in Node.js environments.
  */
 export function setupFetchInterceptor() {
+  if (typeof window === 'undefined' || !window.fetch) {
+    throw new Error('setupFetchInterceptor is only available in browser environments');
+  }
+  
   const originalFetch = window.fetch;
   
   window.fetch = async function(...args) {
@@ -123,16 +131,7 @@ export function setupAxiosInterceptor(axiosInstance) {
         const ids = {};
         const headers = error.response.headers;
         
-        // Common request ID header keys
-        const idKeys = [
-          'x-request-id',
-          'x-trace-id',
-          'x-correlation-id',
-          'request-id',
-          'trace-id'
-        ];
-        
-        idKeys.forEach(key => {
+        ID_HEADERS.forEach(key => {
           if (headers[key]) {
             ids[key] = headers[key];
           }

@@ -67,10 +67,8 @@ Write-Host "Limit: $Limit" -ForegroundColor Cyan
 # Build the SQL query
 $query = "SELECT $IdColumn"
 
-# Add date column if filtering by date
-if (![string]::IsNullOrWhiteSpace($DateFilter)) {
-    $query += ", $DateColumn"
-}
+# Add date column if filtering by date (or always include for ordering)
+$query += ", $DateColumn"
 
 $query += " FROM $TableName"
 
@@ -80,7 +78,7 @@ if (![string]::IsNullOrWhiteSpace($DateFilter)) {
 }
 
 # Add ordering and limit
-$query += " ORDER BY $DateColumn DESC LIMIT $Limit;"
+$query += " ORDER BY $DateColumn DESC LIMIT $Limit"
 
 Write-Host "Query: $query" -ForegroundColor Gray
 Write-Host ""
@@ -89,7 +87,7 @@ Write-Host ""
 Write-Host "Executing query..." -ForegroundColor Yellow
 
 if ($ExportToCsv) {
-    # Export to CSV
+    # Export to CSV - COPY requires query without trailing semicolon
     $csvQuery = "COPY ($query) TO STDOUT WITH CSV HEADER"
     $result = psql "$ConnectionString" -c "$csvQuery" 2>&1
     
@@ -107,8 +105,8 @@ if ($ExportToCsv) {
         exit 1
     }
 } else {
-    # Display in console
-    $result = psql "$ConnectionString" -c "$query" 2>&1
+    # Display in console - add semicolon for direct execution
+    $result = psql "$ConnectionString" -c "$query;" 2>&1
     
     if ($LASTEXITCODE -eq 0) {
         Write-Host $result

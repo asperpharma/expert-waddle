@@ -122,8 +122,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Display deployments
-echo "$DEPLOYMENTS" | head -n $((LIMIT + 5))
+# Display deployments (skip header lines, typically 5 lines)
+HEADER_LINES=5
+echo "$DEPLOYMENTS" | head -n $((LIMIT + HEADER_LINES))
 
 echo ""
 echo -e "${GREEN}=== Deployment Details ===${NC}"
@@ -136,8 +137,15 @@ echo "$DEPLOYMENTS" | tail -n +2 | head -n $LIMIT | while IFS= read -r line; do
         DEPLOYMENT_URL=$(echo "$line" | awk '{print $1}')
         
         if [ -n "$DEPLOYMENT_URL" ] && [ "$DEPLOYMENT_URL" != "Age" ]; then
-            # Extract deployment ID from URL (subdomain before .vercel.app)
-            DEPLOYMENT_ID=$(echo "$DEPLOYMENT_URL" | sed -E 's/https?:\/\///' | sed -E 's/\.vercel\.app.*//')
+            # Extract deployment ID from URL
+            # Note: This assumes standard Vercel URLs (*.vercel.app format)
+            # Custom domains may not follow this pattern
+            if [[ "$DEPLOYMENT_URL" =~ vercel\.app ]]; then
+                DEPLOYMENT_ID=$(echo "$DEPLOYMENT_URL" | sed -E 's|https?://||' | sed -E 's|\.vercel\.app.*||')
+            else
+                # For custom domains, use the full URL as the identifier
+                DEPLOYMENT_ID="custom-domain"
+            fi
             
             if [ -n "$DEPLOYMENT_ID" ]; then
                 echo -e "${CYAN}Deployment:${NC} $DEPLOYMENT_URL"
